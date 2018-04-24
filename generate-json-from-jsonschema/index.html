@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Generate JSON from JsonSchema</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html, body, .wrapper{
+            height: 90%;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .left {
+            height: 100%;
+            width: 100%;
+            border: 1px solid black;
+        }
+        .divider {
+            height: 100%;
+            width: 1px;
+            background-color: black;
+        }
+        .right {
+            height: 100%;
+            width: 100%;
+            border: 1px solid black;
+            overflow-y: auto;
+        }
+
+        #schemaTextBlock {
+            width: 100%;
+            height: 100%;
+        }
+
+        #mainButton {
+            height: 50px;
+            width: 120px;
+            margin-top: 20px;
+            margin-left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h2>JsonSchema -> JSON</h2>
+    <h5>Generate JSON object with faked values from JsonSchema</h5>
+    <div>number of generated array items can be from 1 to 3</div>
+    <a href='https://fredddy123.github.io/generate-jsonschema-from-json/'>switch to <b>JSON -> JsonSchema</b></a>
+    <div class="wrapper">
+        <div class='left'>
+            <textarea id='schemaTextBlock'></textarea>
+        </div>
+        <div class='divider'></div>
+        <div class='right'>
+            <pre id='jsonView'></pre>
+        </div>
+    </div>
+
+    <button id='mainButton'>Genarate</button>
+    <script src='index.js'></script>
+
+    <script>
+        const btnGenerate = document.getElementById('mainButton');
+        const schemaTextBlock = document.getElementById('schemaTextBlock');
+        const jsonView = document.getElementById('jsonView');
+
+        btnGenerate.onclick = () => {
+            let result;
+
+            try {
+                const jsonSchema = JSON.parse(schemaTextBlock.value);
+                result = JSON.stringify(generateJsonFromJsonSchema(jsonSchema), null, '\t');
+            } catch (e) {
+                result = 'your JSON data is not valid'
+            }
+
+            console.log('result', result)
+
+            jsonView.textContent = result;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Generate JSON from JsonSchema</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html, body, .wrapper{
+            height: 90%;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .left {
+            height: 100%;
+            width: 100%;
+            border: 1px solid black;
+        }
+        .divider {
+            height: 100%;
+            width: 1px;
+            background-color: black;
+        }
+        .right {
+            height: 100%;
+            width: 100%;
+            border: 1px solid black;
+            overflow-y: auto;
+        }
+
+        #jsonTextBlock {
+            width: 100%;
+            height: 100%;
+        }
+
+        #mainButton {
+            height: 50px;
+            width: 120px;
+            margin-top: 20px;
+            margin-left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h2>JSON -> JsonSchema</h2>
+    <h5>Generate JsonSchema from JSON</h5>
+    <div>It is assumed that each element of the array has the same structure</div>
+    <a href='https://fredddy123.github.io/generate-json-from-jsonschema/index.html'>switch to <b>JsonSchema -> JSON</b></a>
+    <div class="wrapper">
+        <div class='left'>
+            <textarea id='jsonTextBlock'></textarea>
+        </div>
+        <div class='divider'></div>
+        <div class='right'>
+            <pre id='jsonSchemaView'></pre>
+        </div>
+    </div>
+
+    <button id='mainButton'>Genarate</button>
+    <script src='index.js'></script>
+
+    <script>
+        const btnGenerate = document.getElementById('mainButton');
+        const jsonTextBlock = document.getElementById('jsonTextBlock');
+        const jsonSchemaView = document.getElementById('jsonSchemaView');
+
+        btnGenerate.onclick = () => {
+            let json;
+            let result;
+
+            try {
+                json = JSON.parse(jsonTextBlock.value);
+            } catch (e) {
+                console.log(e);
+            }
+
+            if (!json) {
+                try {
+                    eval(`json = ${jsonTextBlock.value}`);
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+            if (!json) {
+                result = 'your JSON data is not valid';
+            } else {
+                try {
+                    result = JSON.stringify(generateJsonSchemaFromJson(json), null, '\t');
+                } catch (e) {
+                    console.log(e);
+                    result = 'your JSON data is not valid';
+                }
+            }
+
+            console.log('result', result)
+
+            jsonSchemaView.textContent = result;
+        }
+    </script>
+</body>
+</html>
